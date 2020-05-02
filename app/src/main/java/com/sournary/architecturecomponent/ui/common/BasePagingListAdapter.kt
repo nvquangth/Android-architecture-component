@@ -1,6 +1,7 @@
 package com.sournary.architecturecomponent.ui.common
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.paging.PagedListAdapter
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import com.sournary.architecturecomponent.BR
 import com.sournary.architecturecomponent.databinding.ItemNetworkStateBinding
+import com.sournary.architecturecomponent.ext.setSafeClick
 import com.sournary.architecturecomponent.repository.NetworkState
 import java.util.concurrent.Executors
 
@@ -20,7 +22,7 @@ import java.util.concurrent.Executors
  */
 abstract class BasePagingListAdapter<T, B : ViewDataBinding>(
     diffUtil: DiffUtil.ItemCallback<T>,
-    private val retryListener: RetryListener?
+    private val retry: (() -> Unit)? = null
 ) : PagedListAdapter<T, DataViewHolder<ViewDataBinding>>(
     AsyncDifferConfig.Builder(diffUtil)
         .setBackgroundThreadExecutor(Executors.newSingleThreadExecutor())
@@ -36,6 +38,7 @@ abstract class BasePagingListAdapter<T, B : ViewDataBinding>(
         NETWORK_STATE_TYPE -> {
             val binding =
                 ItemNetworkStateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            binding.retryButton.setSafeClick(View.OnClickListener { retry?.invoke() })
             DataViewHolder(binding)
         }
         ITEM_TYPE -> {
@@ -52,7 +55,6 @@ abstract class BasePagingListAdapter<T, B : ViewDataBinding>(
         when (getItemViewType(position)) {
             NETWORK_STATE_TYPE -> with(holder.binding as ItemNetworkStateBinding) {
                 networkState = this@BasePagingListAdapter.networkState
-                retry = retryListener
                 executePendingBindings()
             }
             ITEM_TYPE -> with(holder.binding as B) {
@@ -96,7 +98,8 @@ abstract class BasePagingListAdapter<T, B : ViewDataBinding>(
 
     override fun getItemCount(): Int = super.getItemCount() + if (hasExtraRow()) 1 else 0
 
-    private fun hasExtraRow(): Boolean = networkState != null && networkState != NetworkState.SUCCESS
+    private fun hasExtraRow(): Boolean =
+        networkState != null && networkState != NetworkState.SUCCESS
 
     companion object {
 

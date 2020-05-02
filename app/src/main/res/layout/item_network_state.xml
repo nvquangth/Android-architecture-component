@@ -11,10 +11,6 @@
             name="networkState"
             type="com.sournary.architecturecomponent.repository.NetworkState" />
 
-        <variable
-            name="retry"
-            type="com.sournary.architecturecomponent.ui.common.RetryListener" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,7 +39,6 @@
             android:text="@string/retry"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:onSafeClick="@{() -> retry.retry()}"
             app:visibleGone="@{networkState.status == Status.ERROR}" />
 
         <com.google.android.material.textview.MaterialTextView

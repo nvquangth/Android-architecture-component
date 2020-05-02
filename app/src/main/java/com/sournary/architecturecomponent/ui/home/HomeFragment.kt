@@ -12,15 +12,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import com.google.android.material.chip.Chip
 import com.sournary.architecturecomponent.R
-import com.sournary.architecturecomponent.model.Genre
-import com.sournary.architecturecomponent.model.Movie
 import com.sournary.architecturecomponent.databinding.FragmentHomeBinding
-import com.sournary.architecturecomponent.ext.autoCleared
 import com.sournary.architecturecomponent.ext.hideKeyboard
+import com.sournary.architecturecomponent.model.Genre
 import com.sournary.architecturecomponent.repository.NetworkState
 import com.sournary.architecturecomponent.ui.common.BaseFragment
 import com.sournary.architecturecomponent.ui.common.MenuFlowViewModel
-import com.sournary.architecturecomponent.ui.common.RetryListener
 import com.sournary.architecturecomponent.widget.MovieItemDecoration
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -29,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
  */
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
-    private var adapter by autoCleared<MovieListAdapter>()
+    private lateinit var adapter: MovieListAdapter
 
     private val menuFlowViewModel: MenuFlowViewModel by activityViewModels()
     override val viewModel: HomeViewModel by viewModels { HomeViewModelFactory(this) }
@@ -97,16 +94,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             viewModel.refreshGetMovies()
         }
         adapter = MovieListAdapter(
-            retryListener = object : RetryListener {
-                override fun retry() {
-                    viewModel.retryGetMovies()
-                }
-            },
-            clickListener = object : MovieListItemListener {
-                override fun onItemClick(movie: Movie) {
-                    val directions = HomeFragmentDirections.navigateToMovieDetail(movie.id)
-                    navController.navigate(directions)
-                }
+            retry = { viewModel.retryGetMovies() },
+            click = { movie ->
+                val directions = HomeFragmentDirections.navigateToMovieDetail(movie.id)
+                navController.navigate(directions)
             }
         )
         movie_recycler.adapter = adapter
