@@ -12,6 +12,9 @@ class HomeViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    // The Integer stores the last checked id of a chip in the genre_group.
+    var checkId = 0
+
     val savedGenre = savedStateHandle.getLiveData<Genre>(KEY_GENRE)
     private val moviesRepoResult = savedGenre.map {
         movieRepository.getMovies(viewModelScope, it)
