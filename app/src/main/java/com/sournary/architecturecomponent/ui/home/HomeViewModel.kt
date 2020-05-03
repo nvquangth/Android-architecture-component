@@ -14,6 +14,8 @@ class HomeViewModel(
 
     // The Integer stores the last checked id of a chip in the genre_group.
     var checkId = 0
+    // The Boolean determines whether we should trigger swipe refresh widget.
+    var shouldRefreshing = false
 
     val savedGenre = savedStateHandle.getLiveData<Genre>(KEY_GENRE)
     private val moviesRepoResult = savedGenre.map {

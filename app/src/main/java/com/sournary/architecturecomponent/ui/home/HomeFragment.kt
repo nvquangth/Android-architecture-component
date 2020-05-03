@@ -86,14 +86,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         val searchText = search_text_input.text?.trim() ?: return
         viewModel.genres.value?.forEach { genre ->
             if (genre.name == searchText && viewModel.showMoviesOfCategory(genre)) {
+                viewModel.shouldRefreshing = false
                 movie_recycler.scrollToPosition(0)
-                adapter.submitList(null)
             }
         }
     }
 
     private fun setupMovieList() {
         movie_swipe_refresh.setOnRefreshListener {
+            viewModel.shouldRefreshing = true
             viewModel.refreshGetMovies()
         }
         adapter = MovieListAdapter(
@@ -121,7 +122,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 adapter.setNetworkState(it)
             }
             refreshState.observe(viewLifecycleOwner) {
-                movie_swipe_refresh.isRefreshing = it == NetworkState.LOADING
+                if (shouldRefreshing) {
+                    movie_swipe_refresh.isRefreshing = it == NetworkState.LOADING
+                }
             }
             genres.observe(viewLifecycleOwner) {
                 addGenres(it)
@@ -141,8 +144,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 chip.requestFocus()
                 search_text_input.setText(genre.name)
                 if (viewModel.showMoviesOfCategory(genre)) {
+                    viewModel.shouldRefreshing = false
                     movie_recycler.scrollToPosition(0)
-                    adapter.submitList(null)
                 }
             }
             genre_group.addView(chip)
