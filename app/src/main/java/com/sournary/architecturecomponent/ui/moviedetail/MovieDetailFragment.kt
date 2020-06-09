@@ -3,13 +3,14 @@ package com.sournary.architecturecomponent.ui.moviedetail
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.NavigationUI
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.sournary.architecturecomponent.R
 import com.sournary.architecturecomponent.databinding.FragmentMovieDetailBinding
 import com.sournary.architecturecomponent.ext.autoCleared
@@ -47,44 +48,37 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
         super.onViewCreated(view, savedInstanceState)
         view.setOnApplyWindowInsetsListener { _, insets ->
             EdgeToEdge.passWindowInsetsToChildrenRegularLayout(view as ViewGroup, insets)
-            close_image.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            view.updatePadding(
+                left = insets.systemWindowInsetLeft,
+                right = insets.systemWindowInsetRight
+            )
+            networkStateLayout.updatePadding(top = insets.systemWindowInsetTop)
+            movieDetailScroll.updatePadding(bottom = insets.systemWindowInsetBottom)
+            toolbar.updateLayoutParams<CollapsingToolbarLayout.LayoutParams> {
                 topMargin = insets.systemWindowInsetTop
             }
-            network_state_layout.updatePadding(top = insets.systemWindowInsetTop)
-            movie_detail_scroll.updatePadding(bottom = insets.systemWindowInsetBottom)
+            statusBarScrim.updateLayoutParams<CollapsingToolbarLayout.LayoutParams> {
+                height = insets.systemWindowInsetTop
+            }
+            toolbarScrim.updateLayoutParams<CollapsingToolbarLayout.LayoutParams> {
+                topMargin = insets.systemWindowInsetTop
+            }
             insets
         }
+        NavigationUI.setupWithNavController(collapsingToolbar, toolbar, navController)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setupNavigation()
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         setupRelatedMovieList()
         setupViewModel()
-    }
-
-    private fun setupNavigation() {
-        close_image.setOnClickListener {
-            navController.popBackStack()
-        }
-        error_close_image.setOnClickListener {
-            navController.popBackStack()
-        }
-        retry_button.setOnClickListener {
-            viewModel.retryGetMovie()
-        }
-        visit_site_button.setOnClickListener {
-            val title = viewModel.movie.value?.title ?: return@setOnClickListener
-            val url = viewModel.movie.value?.homepage ?: return@setOnClickListener
-            if (url.isEmpty() || title.isEmpty()) return@setOnClickListener
-            val directions = MovieDetailFragmentDirections.navigateToWebsite(title, url)
-            navController.navigate(directions)
-        }
+        setupEvents()
     }
 
     private fun setupRelatedMovieList() {
         relatedMovieAdapter = RelatedMovieAdapter { viewModel.retryGetRelatedMovies() }
-        related_movie_recycler.adapter = relatedMovieAdapter
+        relatedMovieList.adapter = relatedMovieAdapter
     }
 
     private fun setupViewModel() {
@@ -95,6 +89,30 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
             }
             relatedMovieState?.observe(viewLifecycleOwner) {
                 relatedMovieAdapter.setNetworkState(it)
+            }
+        }
+    }
+
+    private fun setupEvents() {
+        errorCloseImage.setOnClickListener {
+            navController.popBackStack()
+        }
+        retryButton.setOnClickListener {
+            viewModel.retryGetMovie()
+        }
+        visitSiteButton.setOnClickListener {
+            viewModel.launchWebsite { title, url ->
+                val directions = MovieDetailFragmentDirections.navigateToWebsite(title, url)
+                navController.navigate(directions)
+            }
+        }
+        toolbar.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.filter_image_dest ->  viewModel.launchFilterImage { url ->
+                    val directions = MovieDetailFragmentDirections.navigateToFilterImage(url)
+                    navController.navigate(directions)
+                }
+                else -> false
             }
         }
     }

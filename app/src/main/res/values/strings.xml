@@ -7,4 +7,13 @@
     <string name="trailer">Trailer</string>
     <string name="visit_website">Visit website</string>
     <string name="related_movies">Related movies</string>
+    <string name="close">Close</string>
+    <string name="filter_options">Filter options</string>
+    <string name="blur">Blur</string>
+    <string name="gray_scale">Gray scale</string>
+    <string name="water_color">Water color</string>
+    <string name="saving_options">Saving options</string>
+    <string name="save_to_gallery">Save to gallery</string>
+    <string name="save_to_imgur">Save to Imgur</string>
+    <string name="filter_image">Filter image</string>
 </resources>

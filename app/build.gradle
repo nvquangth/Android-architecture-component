@@ -34,8 +34,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
     androidExtensions {
         experimental = true
@@ -45,6 +45,14 @@ android {
     }
     kotlinOptions {
         freeCompilerArgs = ["-Xallow-result-return-type"]
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -91,8 +99,8 @@ dependencies {
     implementation deps.koin.scope
     implementation deps.koin.viewmodel
     implementation deps.koin.ext
-
-    implementation "com.google.android.gms:play-services:12.0.1"
+    // Worker
+    implementation deps.work.runtime
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

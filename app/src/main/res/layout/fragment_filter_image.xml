@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.sournary.architecturecomponent.ui.filterimage.FilterImageViewModel" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+                <com.sournary.architecturecomponent.widget.SquareImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:url="@{viewModel.imagePath}" />
+
+                <View
+                    android:id="@+id/toolbarScrim"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_scrim" />
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin" />
+
+                <View
+                    android:id="@+id/statusBarScrim"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_scrim_light_status_bar"
+                    app:layout_collapseMode="pin" />
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ProgressBar
+                    android:id="@+id/progress"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:indeterminate="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:visibleGone="@{viewModel.showProgress}" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/filterOptionTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:text="@string/filter_options"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/progress" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/blurCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/blur"
+                    app:layout_constraintStart_toStartOf="@id/filterOptionTitleText"
+                    app:layout_constraintTop_toBottomOf="@id/filterOptionTitleText" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/grayScaleCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gray_scale"
+                    app:layout_constraintStart_toStartOf="@id/filterOptionTitleText"
+                    app:layout_constraintTop_toBottomOf="@id/blurCheck" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/waterColorCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/water_color"
+                    app:layout_constraintStart_toStartOf="@id/filterOptionTitleText"
+                    app:layout_constraintTop_toBottomOf="@id/grayScaleCheck" />
+
+                <Space
+                    android:id="@+id/space"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/savingOptionsTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:text="@string/saving_options"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/space"
+                    app:layout_constraintTop_toBottomOf="@id/progress" />
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:layout_constraintStart_toStartOf="@id/savingOptionsTitleText"
+                    app:layout_constraintTop_toBottomOf="@id/savingOptionsTitleText">
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/saveToGalleryRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/save_to_gallery" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/saveToImgur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:text="@string/save_to_imgur" />
+
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/saveToGalleryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/dp_16"
+            android:src="@drawable/ic_save_file"
+            app:backgroundTint="?attr/colorAccent"
+            app:fabSize="normal"
+            app:tint="@android:color/white"
+            app:visibleGone="@{viewModel.showSaveToGallery}" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/cancelWorkButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/dp_16"
+            android:src="@drawable/ic_close"
+            app:backgroundTint="?attr/colorAccent"
+            app:fabSize="normal"
+            app:tint="@android:color/white"
+            app:visibleGone="@{viewModel.showCancelWork}" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

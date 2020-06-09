@@ -1,6 +1,6 @@
 def versions = [:]
 versions.activity = '1.1.0'
-versions.android_gradle_plugin = '3.6.3'
+versions.android_gradle_plugin = '4.0.0'
 versions.annotation = '1.1.0'
 versions.app_compat = '1.1.0'
 versions.arch_core = '2.1.0'
@@ -114,7 +114,6 @@ deps.transition = "androidx.transition:transition:$versions.transition"
 
 def work = [:]
 work.runtime = "androidx.work:work-runtime-ktx:$versions.work"
-work.rxjava2 = "androidx.work:work-rxjava2:$versions.work"
 deps.work = work
 
 def coroutine = [:]

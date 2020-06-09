@@ -10,6 +10,7 @@ import com.sournary.architecturecomponent.db.GenreDao
 import com.sournary.architecturecomponent.model.Genre
 import com.sournary.architecturecomponent.model.Movie
 import com.sournary.architecturecomponent.model.Video
+import com.sournary.architecturecomponent.util.Constant
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -35,11 +36,11 @@ class MovieRepository(private val movieDbApi: MovieDbApi, genreDao: GenreDao) {
     fun getVideos(movieId: Int): LiveData<RepoResult<List<Video>>> = liveData {
         try {
             emit(RepoResult(networkState = NetworkState.LOADING))
-            val videos = movieDbApi.getVideos(movieId).results ?: emptyList()
+            val videos = movieDbApi.getVideos(movieId).results
             emit(RepoResult(data = videos, networkState = NetworkState.SUCCESS))
         } catch (throwable: Throwable) {
-            val errorState = NetworkState.error(throwable.message ?: DEF_ERROR)
-            emit(RepoResult(networkState = errorState))
+            val errorState = NetworkState.error(throwable.message ?: Constant.DEF_ERROR)
+            emit(RepoResult<List<Video>>(networkState = errorState))
         }
     }
 
@@ -73,8 +74,8 @@ class MovieRepository(private val movieDbApi: MovieDbApi, genreDao: GenreDao) {
             val movie = movieDbApi.getMovieDetail(id)
             emit(RepoResult(data = movie, networkState = NetworkState.SUCCESS))
         } catch (throwable: Throwable) {
-            val errorState = NetworkState.error(throwable.message ?: DEF_ERROR)
-            emit(RepoResult(networkState = errorState))
+            val errorState = NetworkState.error(throwable.message ?: Constant.DEF_ERROR)
+            emit(RepoResult<Movie>(networkState = errorState))
         }
     }
 
@@ -91,12 +92,6 @@ class MovieRepository(private val movieDbApi: MovieDbApi, genreDao: GenreDao) {
             retry = { factory.sourceLiveData.value?.retryWhenAllFailed() },
             refresh = { factory.sourceLiveData.value?.invalidate() }
         )
-    }
-
-    companion object {
-
-        private const val DEF_ERROR = "Unknown error"
-
     }
 
 }

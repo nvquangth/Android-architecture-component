@@ -8,8 +8,7 @@ import com.sournary.architecturecomponent.repository.MovieRepository
  * The view model contains all logic of home screen.
  */
 class HomeViewModel(
-    movieRepository: MovieRepository,
-    private val savedStateHandle: SavedStateHandle
+    movieRepository: MovieRepository, private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     // The Integer stores the last checked id of a chip in the genre_group.

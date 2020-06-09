@@ -1,6 +1,7 @@
 package com.sournary.architecturecomponent.ui.moviedetail
 
 import androidx.lifecycle.*
+import com.sournary.architecturecomponent.BuildConfig
 import com.sournary.architecturecomponent.repository.MovieRepository
 
 /**
@@ -24,6 +25,19 @@ class MovieDetailViewModel(private val movieId: Int, movieRepository: MovieRepos
 
     fun retryGetMovie() {
         _movieId.value = movieId
+    }
+
+    fun launchFilterImage(action: (String) -> Unit): Boolean {
+        val posterPath = movie.value?.posterPath ?: return false
+        val imagePath = BuildConfig.BASE_IMAGE_URL + posterPath
+        action.invoke(imagePath)
+        return true
+    }
+
+    fun launchWebsite(action: (String, String) -> Unit) {
+        val title = movie.value?.title ?: return
+        val url = movie.value?.homepage ?: return
+        action.invoke(title, url)
     }
 
 }

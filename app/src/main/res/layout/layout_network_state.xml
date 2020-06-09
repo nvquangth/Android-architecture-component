@@ -18,7 +18,7 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/error_close_image"
+            android:id="@+id/errorCloseImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_8"
@@ -26,7 +26,7 @@
             android:padding="@dimen/dp_8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_close_black"/>
+            app:srcCompat="@drawable/ic_close_black" />
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
             tools:visibility="gone" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/retry_button"
+            android:id="@+id/retryButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
             android:maxLines="3"
             android:text="@{networkState.message}"
             android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@id/retry_button"
+            app:layout_constraintBottom_toTopOf="@id/retryButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="An error happened because of the internet connection" />

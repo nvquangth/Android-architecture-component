@@ -37,6 +37,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.setOnApplyWindowInsetsListener { _, insets ->
+            view.updatePadding(
+                left = insets.systemWindowInsetLeft,
+                right = insets.systemWindowInsetRight
+            )
             view.updatePadding(top = insets.systemWindowInsetTop)
             movie_recycler.updatePadding(bottom = insets.systemWindowInsetBottom)
             insets

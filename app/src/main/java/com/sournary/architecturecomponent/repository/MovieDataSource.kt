@@ -6,6 +6,7 @@ import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
 import com.sournary.architecturecomponent.model.Movie
 import com.sournary.architecturecomponent.api.MovieListResponse
+import com.sournary.architecturecomponent.util.Constant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -53,7 +54,7 @@ class MovieDataSource(
                 _refreshState.postValue(NetworkState.SUCCESS)
                 callback.onResult(movies, null, 2)
             } catch (e: Exception) {
-                val error = NetworkState.error(e.message ?: DEF_ERROR)
+                val error = NetworkState.error(e.message ?: Constant.DEF_ERROR)
                 _networkState.postValue(error)
                 _refreshState.postValue(error)
                 retry = { loadInitial(params, callback) }
@@ -72,7 +73,7 @@ class MovieDataSource(
                 _networkState.postValue(NetworkState.SUCCESS)
                 callback.onResult(movies, nextKey)
             } catch (e: Exception) {
-                _networkState.postValue(NetworkState.error(e.message ?: DEF_ERROR))
+                _networkState.postValue(NetworkState.error(e.message ?: Constant.DEF_ERROR))
                 retry = { loadAfter(params, callback) }
             }
         }
@@ -80,12 +81,6 @@ class MovieDataSource(
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
         // Ignored
-    }
-
-    companion object {
-
-        private const val DEF_ERROR = "Unknown error"
-
     }
 
     class Factory(

@@ -6,10 +6,10 @@ import android.view.View
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.NavigationUI
 import com.sournary.architecturecomponent.R
 import com.sournary.architecturecomponent.databinding.FragmentWebsiteBinding
 import com.sournary.architecturecomponent.ui.common.BaseFragment
-import kotlinx.android.synthetic.main.app_toolbar.*
 import kotlinx.android.synthetic.main.fragment_website.*
 
 /**
@@ -37,22 +37,17 @@ class WebsiteFragment : BaseFragment<FragmentWebsiteBinding, WebsiteViewModel>()
             view.updatePadding(top = insets.systemWindowInsetTop)
             insets
         }
+        NavigationUI.setupWithNavController(toolbar, navController)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setupNavigation()
         setupWebsite()
-    }
-
-    private fun setupNavigation() {
-        title_text.text = title
-        navigation_image.setOnClickListener { navController.popBackStack() }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebsite() {
-        website.loadUrl(url)
+        // website.loadUrl(url)
         website.settings.javaScriptEnabled = true
     }
 

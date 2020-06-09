@@ -30,8 +30,14 @@
         <action
             android:id="@+id/navigate_to_website"
             app:destination="@id/website_dest"
-            app:enterAnim="@anim/anim_enter_from_right"
-            app:popExitAnim="@anim/anim_exit_to_right" />
+            app:enterAnim="@anim/anim_enter_from_bottom"
+            app:popExitAnim="@anim/anim_exit_to_bottom" />
+
+        <action
+            android:id="@+id/navigate_to_filter_image"
+            app:destination="@id/filter_image_dest"
+            app:enterAnim="@anim/anim_enter_from_bottom"
+            app:popExitAnim="@anim/anim_exit_to_bottom" />
 
     </fragment>
 
@@ -47,6 +53,18 @@
         <argument
             android:name="url"
             app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/filter_image_dest"
+        android:name="com.sournary.architecturecomponent.ui.filterimage.FilterImageFragment"
+        tools:layout="@layout/fragment_filter_image">
+
+        <argument
+            android:name="url"
+            app:argType="string"
+            app:nullable="false" />
 
     </fragment>
 
