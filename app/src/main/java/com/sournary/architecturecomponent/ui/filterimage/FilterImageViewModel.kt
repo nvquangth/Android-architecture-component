@@ -35,16 +35,16 @@ class FilterImageViewModel(application: Application, initImagePath: String) :
         workManager.cancelUniqueWork(Constant.IMAGE_FILTER_WORK_NAME)
     }
 
-    fun setProgressVisibility(show: Boolean) {
-        _showProgress.value = show
-    }
-
-    fun setSaveToGalleryVisibility(show: Boolean) {
-        _showSaveToGallery.value = show
-    }
-
-    fun setCancelWorkVisibility(show: Boolean) {
-        _showCancelWork.value = show
+    fun showFilterWorkVisibility(finished: Boolean) {
+        if (finished) {
+            _showProgress.value = false
+            _showCancelWork.value = false
+            _showSaveToGallery.value = true
+        } else {
+            _showProgress.value = true
+            _showCancelWork.value = true
+            _showSaveToGallery.value = false
+        }
     }
 
 }

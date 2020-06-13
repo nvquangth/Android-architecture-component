@@ -10,7 +10,7 @@ import com.sournary.architecturecomponent.repository.MovieRepository
 class MovieDetailViewModel(private val movieId: Int, movieRepository: MovieRepository) :
     ViewModel() {
 
-    private val _movieId = MutableLiveData<Int>(movieId)
+    private val _movieId = MutableLiveData(movieId)
     private val movieRepoResult = _movieId.switchMap { movieRepository.getMovieDetail(movieId) }
     val movie = movieRepoResult.map { it.data }
     val movieNetworkState = movieRepoResult.map { it.networkState }
@@ -25,6 +25,7 @@ class MovieDetailViewModel(private val movieId: Int, movieRepository: MovieRepos
 
     fun retryGetMovie() {
         _movieId.value = movieId
+        relatedMoviesRepoResult.retry?.invoke()
     }
 
     fun launchFilterImage(action: (String) -> Unit): Boolean {
@@ -32,12 +33,6 @@ class MovieDetailViewModel(private val movieId: Int, movieRepository: MovieRepos
         val imagePath = BuildConfig.BASE_IMAGE_URL + posterPath
         action.invoke(imagePath)
         return true
-    }
-
-    fun launchWebsite(action: (String, String) -> Unit) {
-        val title = movie.value?.title ?: return
-        val url = movie.value?.homepage ?: return
-        action.invoke(title, url)
     }
 
 }

@@ -16,6 +16,7 @@
         android:background="@android:color/white">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -32,7 +33,6 @@
                     app:url="@{viewModel.imagePath}" />
 
                 <View
-                    android:id="@+id/toolbarScrim"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/shape_scrim" />
@@ -41,13 +41,6 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin" />
-
-                <View
-                    android:id="@+id/statusBarScrim"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/shape_scrim_light_status_bar"
                     app:layout_collapseMode="pin" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -82,9 +75,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_16"
-                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_24"
                     android:text="@string/filter_options"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp_19"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/progress" />
@@ -93,8 +87,9 @@
                     android:id="@+id/blurCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginTop="@dimen/dp_4"
                     android:text="@string/blur"
+                    android:translationX="-5dp"
                     app:layout_constraintStart_toStartOf="@id/filterOptionTitleText"
                     app:layout_constraintTop_toBottomOf="@id/filterOptionTitleText" />
 
@@ -103,6 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/gray_scale"
+                    android:translationX="-5dp"
                     app:layout_constraintStart_toStartOf="@id/filterOptionTitleText"
                     app:layout_constraintTop_toBottomOf="@id/blurCheck" />
 
@@ -111,6 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/water_color"
+                    android:translationX="-5dp"
                     app:layout_constraintStart_toStartOf="@id/filterOptionTitleText"
                     app:layout_constraintTop_toBottomOf="@id/grayScaleCheck" />
 
@@ -126,9 +123,10 @@
                     android:id="@+id/savingOptionsTitleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_24"
                     android:text="@string/saving_options"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp_19"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/space"
                     app:layout_constraintTop_toBottomOf="@id/progress" />
@@ -136,7 +134,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_8"
+                    android:translationX="-5dp"
                     app:layout_constraintStart_toStartOf="@id/savingOptionsTitleText"
                     app:layout_constraintTop_toBottomOf="@id/savingOptionsTitleText">
 
@@ -144,6 +142,7 @@
                         android:id="@+id/saveToGalleryRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_4"
                         android:checked="true"
                         android:text="@string/save_to_gallery" />
 
@@ -160,28 +159,22 @@
 
         </androidx.core.widget.NestedScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/saveToGalleryButton"
+            style="@style/ArchitectureComponent.ExtendedFloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/dp_16"
-            android:src="@drawable/ic_save_file"
-            app:backgroundTint="?attr/colorAccent"
-            app:fabSize="normal"
-            app:tint="@android:color/white"
+            android:text="@string/save"
+            app:icon="@drawable/ic_save_file"
             app:visibleGone="@{viewModel.showSaveToGallery}" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/cancelWorkButton"
+            style="@style/ArchitectureComponent.ExtendedFloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/dp_16"
-            android:src="@drawable/ic_close"
-            app:backgroundTint="?attr/colorAccent"
-            app:fabSize="normal"
-            app:tint="@android:color/white"
+            android:text="@string/cancel"
+            app:icon="@drawable/ic_close"
             app:visibleGone="@{viewModel.showCancelWork}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

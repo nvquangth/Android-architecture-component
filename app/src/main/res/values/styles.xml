@@ -13,4 +13,14 @@
 
     <style name="Theme.App" parent="Theme.Base" />
 
+    <style name="ArchitectureComponent.ExtendedFloatingActionButton" parent="">
+        <item name="iconTint">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="fabSize">normal</item>
+        <item name="android:layout_margin">@dimen/dp_16</item>
+        <item name="iconPadding">@dimen/dp_8</item>
+        <item name="android:layout_gravity">bottom|end</item>
+    </style>
+
 </resources>

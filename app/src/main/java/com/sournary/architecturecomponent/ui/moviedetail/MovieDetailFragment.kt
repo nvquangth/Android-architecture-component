@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.sournary.architecturecomponent.R
 import com.sournary.architecturecomponent.databinding.FragmentMovieDetailBinding
@@ -21,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_movie_detail.*
 import kotlinx.android.synthetic.main.layout_network_state.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import timber.log.Timber
 
 /**
  * The class represent movie detail screen.
@@ -57,12 +59,6 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
             toolbar.updateLayoutParams<CollapsingToolbarLayout.LayoutParams> {
                 topMargin = insets.systemWindowInsetTop
             }
-            statusBarScrim.updateLayoutParams<CollapsingToolbarLayout.LayoutParams> {
-                height = insets.systemWindowInsetTop
-            }
-            toolbarScrim.updateLayoutParams<CollapsingToolbarLayout.LayoutParams> {
-                topMargin = insets.systemWindowInsetTop
-            }
             insets
         }
         NavigationUI.setupWithNavController(collapsingToolbar, toolbar, navController)
@@ -70,10 +66,20 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        setupAppBar()
         setupRelatedMovieList()
         setupViewModel()
         setupEvents()
+    }
+
+    private fun setupAppBar() {
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        val translationSpace = resources.getDimension(R.dimen.dp_120)
+        val offsetListener = AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
+            image.translationY = seekPosition * translationSpace
+        }
+        appbar.addOnOffsetChangedListener(offsetListener)
     }
 
     private fun setupRelatedMovieList() {
@@ -100,15 +106,9 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding, MovieDetail
         retryButton.setOnClickListener {
             viewModel.retryGetMovie()
         }
-        visitSiteButton.setOnClickListener {
-            viewModel.launchWebsite { title, url ->
-                val directions = MovieDetailFragmentDirections.navigateToWebsite(title, url)
-                navController.navigate(directions)
-            }
-        }
         toolbar.setOnMenuItemClickListener {
-            when(it.itemId){
-                R.id.filter_image_dest ->  viewModel.launchFilterImage { url ->
+            when (it.itemId) {
+                R.id.filter_image_dest -> viewModel.launchFilterImage { url ->
                     val directions = MovieDetailFragmentDirections.navigateToFilterImage(url)
                     navController.navigate(directions)
                 }

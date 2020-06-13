@@ -16,4 +16,6 @@
     <string name="save_to_gallery">Save to gallery</string>
     <string name="save_to_imgur">Save to Imgur</string>
     <string name="filter_image">Filter image</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -28,31 +28,10 @@
             app:argType="integer" />
 
         <action
-            android:id="@+id/navigate_to_website"
-            app:destination="@id/website_dest"
-            app:enterAnim="@anim/anim_enter_from_bottom"
-            app:popExitAnim="@anim/anim_exit_to_bottom" />
-
-        <action
             android:id="@+id/navigate_to_filter_image"
             app:destination="@id/filter_image_dest"
             app:enterAnim="@anim/anim_enter_from_bottom"
             app:popExitAnim="@anim/anim_exit_to_bottom" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/website_dest"
-        android:name="com.sournary.architecturecomponent.ui.website.WebsiteFragment"
-        tools:layout="@layout/fragment_website">
-
-        <argument
-            android:name="title"
-            app:argType="string" />
-
-        <argument
-            android:name="url"
-            app:argType="string" />
 
     </fragment>
 

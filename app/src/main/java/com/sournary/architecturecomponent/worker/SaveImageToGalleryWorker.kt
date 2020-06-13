@@ -4,15 +4,13 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.sournary.architecturecomponent.ext.getFilterInputBitmap
 import com.sournary.architecturecomponent.util.Constant
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,22 +21,17 @@ class SaveImageToGalleryWorker(context: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         return try {
             val resolver = applicationContext.contentResolver
-            val remoteData: Boolean
+            val isRemote: Boolean
             val imagePath = if (inputData.getString(Constant.KEY_LOCAL_IMAGE) != null) {
-                remoteData = false
+                isRemote = false
                 inputData.getString(Constant.KEY_LOCAL_IMAGE)
             } else {
-                remoteData = true
+                isRemote = true
                 inputData.getString(Constant.KEY_REMOTE_IMAGE)
             }
             if (imagePath.isNullOrEmpty()) return Result.failure()
             // Get output bitmap.
-            val output = if (remoteData) {
-                URL(imagePath).openStream().use { BitmapFactory.decodeStream(it) }
-            } else {
-                val uri = Uri.parse(imagePath)
-                resolver.openInputStream(uri).use { BitmapFactory.decodeStream(it) }
-            }
+            val output = imagePath.getFilterInputBitmap(resolver, isRemote)
             val outputPath = saveImage(resolver, output)
             Result.success(workDataOf(Constant.KEY_OUTPUT_IMAGE to outputPath))
         } catch (e: Exception) {
@@ -56,6 +49,7 @@ class SaveImageToGalleryWorker(context: Context, params: WorkerParameters) :
                 getImageDescription()
             )
         } else {
+            // On Android 10, the external storage enables scoped storage.
             val imageCollection =
                 MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
             val imageValue = ContentValues().apply {
@@ -65,7 +59,7 @@ class SaveImageToGalleryWorker(context: Context, params: WorkerParameters) :
             }
             val imageUri = resolver.insert(imageCollection, imageValue) ?: return null
             resolver.openOutputStream(imageUri).use {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 0, it)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
             }
             imageValue.clear()
             imageValue.put(MediaStore.Images.Media.IS_PENDING, 0)
@@ -75,7 +69,7 @@ class SaveImageToGalleryWorker(context: Context, params: WorkerParameters) :
     }
 
     private fun getImageDescription(): String {
-        val dateFormatter = SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss z", Locale.getDefault())
+        val dateFormatter = SimpleDateFormat(Constant.FORMAT_OUTPUT_TIME, Locale.getDefault())
         return dateFormatter.format(Date())
     }
 

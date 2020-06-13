@@ -2,16 +2,14 @@ package com.sournary.architecturecomponent.worker
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.sournary.architecturecomponent.ext.getFilterInputBitmap
 import com.sournary.architecturecomponent.util.Constant
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-import java.net.URL
 import java.util.*
 
 /**
@@ -32,7 +30,8 @@ abstract class BaseFilterImageWorker(context: Context, params: WorkerParameters)
         }
         if (imagePath.isNullOrEmpty()) return Result.failure()
         return try {
-            val input = getInputBitmap(remoteData, imagePath) ?: return Result.failure()
+            val input =
+                imagePath.getFilterInputBitmap(applicationContext.contentResolver, remoteData)
             val output = applyFilter(input)
             val outputUri = writeBitmapToFile(output)
             Result.success(workDataOf(Constant.KEY_LOCAL_IMAGE to outputUri.toString()))
@@ -40,17 +39,6 @@ abstract class BaseFilterImageWorker(context: Context, params: WorkerParameters)
             Result.failure()
         }
     }
-
-    @Throws(IOException::class)
-    private fun getInputBitmap(remoteData: Boolean, imagePath: String): Bitmap? = if (remoteData) {
-        URL(imagePath).openStream().use { BitmapFactory.decodeStream(it) }
-    } else {
-        val imageUri = Uri.parse(imagePath)
-        applicationContext.contentResolver
-            .openInputStream(imageUri)
-            .use { BitmapFactory.decodeStream(it) }
-    }
-
 
     abstract fun applyFilter(input: Bitmap): Bitmap
 
@@ -66,7 +54,7 @@ abstract class BaseFilterImageWorker(context: Context, params: WorkerParameters)
         if (!outputDir.exists()) outputDir.mkdir()
         val outputFile = File(outputDir, name)
         return FileOutputStream(outputFile).use {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, it)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
             Uri.fromFile(outputFile)
         }
     }

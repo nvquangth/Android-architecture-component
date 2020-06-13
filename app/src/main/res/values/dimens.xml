@@ -13,7 +13,11 @@
     <dimen name="dp_120">120dp</dimen>
     <dimen name="dp_192">192dp</dimen>
     <dimen name="dp_200">200dp</dimen>
+    <dimen name="dp_280">280dp</dimen>
+    <dimen name="dp_296">296dp</dimen>
+    <dimen name="dp_400">400dp</dimen>
 
     <dimen name="sp_12">12sp</dimen>
     <dimen name="sp_17">17sp</dimen>
+    <dimen name="sp_19">19sp</dimen>
 </resources>

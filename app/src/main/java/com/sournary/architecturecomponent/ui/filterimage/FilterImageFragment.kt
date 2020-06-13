@@ -66,17 +66,8 @@ class FilterImageFragment : BaseFragment<FragmentFilterImageBinding, FilterImage
             if (it.isNullOrEmpty()) return@Observer
             // We only care about the one output status.
             // Every continuation has only one worker tagged SAVE_IMAGE_TAG
-            val info = it[0]
-            val finished = info.state.isFinished
-            if (!finished){
-                viewModel.setProgressVisibility(true)
-                viewModel.setCancelWorkVisibility(true)
-                viewModel.setSaveToGalleryVisibility(false)
-            }else {
-                viewModel.setProgressVisibility(false)
-                viewModel.setCancelWorkVisibility(false)
-                viewModel.setSaveToGalleryVisibility(true)
-            }
+            val finished = it[0].state.isFinished
+            viewModel.showFilterWorkVisibility(finished)
         })
     }
 
@@ -89,6 +80,9 @@ class FilterImageFragment : BaseFragment<FragmentFilterImageBinding, FilterImage
                 .applySavedImage(saveToGalleryRadio.isChecked)
                 .build()
             viewModel.filterImage(imageOperation)
+        }
+        cancelWorkButton.setOnClickListener {
+            viewModel.cancelFilter()
         }
     }
 

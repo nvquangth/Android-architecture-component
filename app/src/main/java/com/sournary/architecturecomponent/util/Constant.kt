@@ -15,5 +15,6 @@ object Constant {
     const val IMAGE_FILTER_WORK_NAME = "image_filter_work"
     const val SAVED_GALLERY_IMAGE_NAME = "filter_image"
     const val SAVE_IMAGE_TAG = "SAVE_IMAGE_TAG"
+    const val FORMAT_OUTPUT_TIME = "yyyy.MM.dd 'at' HH:mm:ss z"
 
 }

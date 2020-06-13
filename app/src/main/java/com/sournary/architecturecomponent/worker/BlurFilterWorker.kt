@@ -16,7 +16,7 @@ class BlurFilterWorker(context: Context, params: WorkerParameters) :
         val output = Bitmap.createBitmap(input.width, input.height, Bitmap.Config.ARGB_8888)
         val inAllocation = Allocation.createFromBitmap(renderScript, input)
         val outAllocation = Allocation.createTyped(renderScript, inAllocation.type)
-        ScriptIntrinsicBlur.create(renderScript, Element.A_8(renderScript)).apply {
+        ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript)).apply {
             setRadius(25f)
             setInput(inAllocation)
             forEach(outAllocation)
